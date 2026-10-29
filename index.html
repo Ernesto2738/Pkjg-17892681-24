@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#111111">
-<title>🤍</title>
+<title>presiona</title>
 <style>
   html, body { height: 100%; margin: 0; background: #111; }
   body { display: flex; align-items: center; justify-content: center; }
@@ -16,16 +16,33 @@
 <div id="ok">✓</div>
 <script>
   const TEMA = "behh-bro-luz-197khk8";
-  const AHORA = Date.now();
-  let ultimo = 0;
-  try { ultimo = Number(localStorage.getItem("ultimo") || 0); } catch (e) {}
+  const EMOJI = "E🫂";
+  const VENTANA_MIN = 5; // minutos que cuenta los toques
+
   const ok = document.getElementById("ok");
   setTimeout(() => ok.classList.add("show"), 100);
-  if (AHORA - ultimo > 60000) {
-    try { localStorage.setItem("ultimo", String(AHORA)); } catch (e) {}
-    const url = "https://ntfy.sh/" + TEMA + "?title=" + encodeURIComponent("🤍") + "&priority=4";
-    fetch(url, { method: "POST", mode: "no-cors", body: "Te necesito" }).catch(() => {});
-  }
+
+  const AHORA = Date.now();
+  let n = 0, inicio = AHORA;
+  try {
+    n = Number(localStorage.getItem("n") || 0);
+    inicio = Number(localStorage.getItem("inicio") || AHORA);
+  } catch (e) {}
+
+  // Pasó la ventana desde el primer toque = se reinicia
+  if (n === 0 || AHORA - inicio > VENTANA_MIN * 60 * 1000) { n = 0; inicio = AHORA; }
+  n++;
+  try {
+    localStorage.setItem("n", String(n));
+    localStorage.setItem("inicio", String(inicio));
+  } catch (e) {}
+
+  const mensaje = n === 1 ? "hablame" : "hablame · " + n + " veces";
+  const prioridad = n === 1 ? 4 : 1;
+  const url = "https://ntfy.sh/" + TEMA + "/r" + inicio +
+    "?title=" + encodeURIComponent(EMOJI) + "&priority=" + prioridad;
+  fetch(url, { method: "POST", mode: "no-cors", body: mensaje }).catch(() => {});
+
   setTimeout(() => ok.classList.remove("show"), 2500);
 </script>
 </body>
