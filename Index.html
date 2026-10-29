@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111111">
+<title>🤍</title>
+<style>
+  html, body { height: 100%; margin: 0; background: #111; }
+  body { display: flex; align-items: center; justify-content: center; }
+  #ok { font-size: 64px; color: #fff; opacity: 0; transition: opacity .8s ease; }
+  #ok.show { opacity: .85; }
+</style>
+</head>
+<body>
+<div id="ok">✓</div>
+<script>
+  const TEMA = "behh-bro-luz-197khk8";
+  const AHORA = Date.now();
+  let ultimo = 0;
+  try { ultimo = Number(localStorage.getItem("ultimo") || 0); } catch (e) {}
+  const ok = document.getElementById("ok");
+  setTimeout(() => ok.classList.add("show"), 100);
+  if (AHORA - ultimo > 60000) {
+    try { localStorage.setItem("ultimo", String(AHORA)); } catch (e) {}
+    const url = "https://ntfy.sh/" + TEMA + "?title=" + encodeURIComponent("🤍") + "&priority=4";
+    fetch(url, { method: "POST", mode: "no-cors", body: "Te necesito" }).catch(() => {});
+  }
+  setTimeout(() => ok.classList.remove("show"), 2500);
+</script>
+</body>
+</html>
